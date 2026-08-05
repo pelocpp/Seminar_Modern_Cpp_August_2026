@@ -9,6 +9,12 @@ namespace GenericFunctions {
     // ---------------------------------------------------------------------------------
     // generic function
 
+    // Stack Frame: Als Wert
+    // int:          4 Bytes
+    // double:       8 Bytes
+    // std::string:  40 Bytes
+
+
     static void function(auto x, int y) {
         std::println("x={}, y={}", x, y);
     };
@@ -206,9 +212,11 @@ namespace GenericLambdasExample {
     static void test_01()
     {
         // define a generic lambda
-        auto isGreaterThanFifty = [](auto n) { return n > 50; };
+        auto isGreaterThanFifty = [](auto n) {
+            return n > 50;
+        };
 
-        std::vector<int> intValues{ 44, 65, 22, 77, 2 };
+        std::vector<long> intValues{ 44, 65, 22, 77, 2 };
 
         // use generic lambda with a vector of integers
         auto it1 = std::find_if(

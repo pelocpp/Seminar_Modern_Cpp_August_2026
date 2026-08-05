@@ -29,7 +29,7 @@ int main()
     try
     {
         //main_accumulate();
-        //main_algorithms();
+        main_algorithms();
         //main_allocator();
         //main_any();
         //main_argument_dependent_name_lookup();
@@ -39,7 +39,7 @@ int main()
        // main_auto();
         //main_back_inserter();
         //main_bind();
-        //main_brace_initialization();
+      //  main_brace_initialization();
         //main_casts();
         //main_common_type();
         //main_concepts_requires_classes();
@@ -63,20 +63,20 @@ int main()
         //main_functional_programming_legacy();
         //main_functional_programming_alternate();
         //main_generate();
-        //main_generic_functions();
+      //  main_generic_functions();
         //main_initializer_list();
         //main_input_output_streams();  
         //main_invoke();
-        main_lambdas();
+       // main_lambdas();
         //main_lambda_and_closure();
         //main_lambdas_this_closure();
         //main_literals();
-        //main_memory_leaks_detection();
+    //    main_memory_leaks_detection();
         //main_metaprogramming_01();
         //main_metaprogramming_02(); 
         //main_modularized_standard_library(); 
         //main_modules();
-        //main_move_semantics();
+     //   main_move_semantics();
         //main_optional();
         //main_perfect_forwarding();
         //main_placement_new();
@@ -84,13 +84,13 @@ int main()
         //main_raii();
         //main_raii_02();
         //main_random();
-        //main_range_based_for_loop();
+      // main_range_based_for_loop();
         //main_reference_wrapper();
         //main_reflection();
         //main_regular_expressions();
         //main_rvalue_lvalue();
         //main_sfinae();
-        //main_shared_ptr();
+      //  main_shared_ptr();
         //main_source_location();
         //main_spaceship_operator();
         //main_sso();
@@ -110,7 +110,7 @@ int main()
         //main_type_erasure();
         //main_type_erasure_bookstore();
         //main_type_traits();
-        //main_unique_ptr();
+       // main_unique_ptr();
         //main_variadic_templates_introduction();
         //main_variadic_templates_working_on_every_argument();
         //main_variadic_templates_sum_of_sums();
@@ -118,9 +118,9 @@ int main()
         //main_variant();
         //main_virtual_base_class_destructor();
         //main_virtual_override_final();
-        //main_weak_pointer();
+      //  main_weak_pointer();
 
-        //main_exercises();
+    //    main_exercises();
     }
     catch (const std::exception& ex) {
         std::println("Exception: {}", ex.what());

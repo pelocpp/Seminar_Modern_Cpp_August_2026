@@ -11,12 +11,47 @@ module modern_cpp:unique_ptr;
 
 namespace UniquePointerGeneral {
 
+    void processData(const std::string& data)
+    {
+        std::println("Data: {}", data);
+    }
+
+    void processDataClike(const std::string* data)
+    {
+        std::println("Data: {}", *data);
+    }
+
+    static void test_00()
+    {
+        auto ptr1 = std::make_unique<std::string>("123");
+        auto ptr2 = std::make_unique<std::string>("456");
+
+        std::vector<std::unique_ptr<std::string>> dynData;
+
+        dynData.push_back(std::move(ptr1));
+        dynData.push_back(std::move(ptr2));
+
+        // ======================
+
+        auto ptr3 = std::move(dynData[0]);
+        auto& ptr4 = dynData[1];
+
+        processData(*dynData[1].get());   // C-Stylistik
+
+        processDataClike (dynData[1].get());   // more C-Stylistik
+    }
+
     static void test_01()
     {
+        //std::unique_ptr<int> ptrA;
+        //std::unique_ptr<int> ptrB;
+        //ptrA = ptrB;
+
+
         // create a unique_ptr to an int with value 123
-        std::unique_ptr<int> ptr1{ new int{ 123 } };
+        //std::unique_ptr<int> ptr1{ new int{ 123 } };
         // or
-        // std::unique_ptr<int> ptr1{ std::make_unique<int>(123) };
+        std::unique_ptr<int> ptr1{ std::make_unique<int>(123) };
         // or
         // auto ptr1{ std::make_unique<int>(123) };
 
@@ -57,8 +92,12 @@ namespace UniquePointerGeneral {
 
     static std::unique_ptr<int> loadUniquePointer()
     {
-        std::unique_ptr<int> ptr{ std::make_unique<int>(100) };
-        return ptr;
+        std::unique_ptr<int> leer;
+
+      //   std::unique_ptr<int> ptr{ std::make_unique<int>(100) };
+        std::unique_ptr<int> ptr{ new int{ 123 } };
+
+        return ptr;   // Im UP   // ptr gleich beim Aufrufer ausgerollt werden.
     }
 
     static void storeUniquePointer(std::unique_ptr<int>& ptr)
@@ -92,10 +131,15 @@ namespace UniquePointerGeneral {
         //    pointer is owned by accompanied Unique Ptr
     }
 
+    //static void test_02_array()
+    //{
+    //    int zahlen[400000000]{};
+    //}
+
     static void test_02()
     {
         // retrieving a unique pointer from a function
-        std::unique_ptr<int> ptr{ loadUniquePointer() };
+        std::unique_ptr<int> ptr = loadUniquePointer();
         std::println("*ptr:    {}", *ptr);
 
         // provide a function with a unique pointer: who owns the pointer now?
@@ -273,6 +317,9 @@ namespace UniquePointerWrappingWin32Handles {
 void main_unique_ptr()
 {
     using namespace UniquePointerGeneral;
+
+    test_00();
+
     test_01();   
     test_02();     // interaction with functions/methods
     test_03();     // support of arrays

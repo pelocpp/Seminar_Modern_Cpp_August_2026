@@ -10,7 +10,7 @@ module modern_cpp:range_based_for_loop;
 
 namespace RangeBasedForLoop {
 
-    // global function
+    // free function
     static void processElement(int n)
     {
         std::cout << n << " ";
@@ -20,7 +20,7 @@ namespace RangeBasedForLoop {
     class ElementProcessor
     {
     public:
-        void operator() (int n) const { 
+        void operator() (auto n) const { 
             std::cout << n << " ";
         }
     };
@@ -76,15 +76,20 @@ namespace RangeBasedForLoop {
         // =========================================================================
         // Range-based 'for' Loop examples
 
-        // f) Using Range-based 'for' Loop: Very modern style
-        for (int n : vec) {
+        // f) Using Range-based 'for' Loop: Very modern style   // Python-like
+
+        // for (  init  ; condition   ;  next_step )
+
+        // for ( typ name : container )
+
+        for (int n : vec) {    // Achtung: n ist eine Kopie
             std::cout << n << " ";
             if (n == 2)  // break is possible
                 break;
         }
         std::cout << std::endl;
 
-        // g) Same as f), using 'const int&'
+        // g) Same as f), using 'const int&'   Achtung: Zugriff  (Alias) auf das Original: lesend
         for (const int& n : vec) {
             std::cout << n << " ";
         }
@@ -103,6 +108,11 @@ namespace RangeBasedForLoop {
         std::cout << std::endl;
 
         // j) Real C++: How the compiler 'sees' a Range-based 'for' Loop
+
+        //for (int n : vec) { 
+        //    std::cout << n << " ";
+        //}
+
         std::vector<int>::const_iterator begin = vec.cbegin();
         std::vector<int>::const_iterator end = vec.cend();
 
@@ -128,6 +138,9 @@ namespace RangeBasedForLoop {
 
         // l) Range-based 'for' loop with initializer,
         // we can now use the index variable inside the for statement
+
+        // C++ 17:  for ( init   ; typ name  :  container)
+
         for (int index{}; int n : vec) {
             std::cout << index << ": " << n << " " << std::endl;
             ++index;

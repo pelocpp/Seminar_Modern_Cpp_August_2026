@@ -22,7 +22,7 @@ namespace MemoryLeaksDetection {
     static void test_01() {
 
         int* ip = new int[10];
-        // delete[] ip;   // put this line into comment to generate 'Object dump'
+       // delete[] ip;   // put this line into comment to generate 'Object dump'
     }
 }
 

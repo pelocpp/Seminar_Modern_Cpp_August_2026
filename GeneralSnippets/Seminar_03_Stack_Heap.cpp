@@ -2,6 +2,30 @@
 #include <print>
 
 
+struct Point
+{
+    int x;
+    int y;
+};
+
+
+void demo(int&& n)
+{
+}
+
+void zuReferenzen()
+{
+    int n = 123;
+
+    demo(123);
+
+//    int& rn = nullptr;
+
+    Point p = { 1, 2 };
+
+    Point& rp = p;
+}
+
 void malZwei(int value)
 {
     int m = value;

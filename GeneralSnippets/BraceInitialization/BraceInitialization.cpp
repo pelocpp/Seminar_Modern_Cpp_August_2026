@@ -14,6 +14,9 @@ namespace BraceInitialization {
         int ival{ 123 };
 
         double d1 = ival;      // Compiles
+
+    //    double d2{ ival };
+
         // double d2{ ival };  // Error: "conversion from 'int' to 'double' requires a narrowing conversion"
     }
 
@@ -22,6 +25,14 @@ namespace BraceInitialization {
 
     static void test_01()
     {
+
+        int x0 = 0;
+
+        int x1{};
+
+
+
+
         int n{};                   // n equals 0
         float f{};                 // f equals 0.0
         double d{};                // d equals 0.0
@@ -41,6 +52,10 @@ namespace BraceInitialization {
 
     static void test_02()
     {
+        int x = 1;
+        int x1{ 1 };
+
+
         int n{ 1 };                // n equals 1
         float f{ 2.5f };           // f equals 2.5
         double d{ 3.5 };           // d equals 3.5
@@ -73,9 +88,9 @@ namespace BraceInitialization {
         struct Struct obj2 { 1, 2 };                  // obj2.m_i => 1, obj2.m_j => 2
 
         // designated initializer syntax
-        struct Struct obj3 { .m_i = 1, .m_j = 2 };    // obj2.m_i => 1, obj2.m_j => 2
+        struct Struct obj3 {/* .m_i = 1,*/ .m_j = 2 };    // obj2.m_i => 1, obj2.m_j => 2
 
-        struct Struct obj4 { 3 };                     // obj3.m_i => 3, obj3.m_j => 0
+        struct Struct obj4 { 3, 0 };                     // obj3.m_i => 3, obj3.m_j => 0
         // gcc: warning:
         // missing initializer for member 'Struct::m_j'
     }
@@ -109,6 +124,7 @@ namespace BraceInitialization {
 
     static void test_05()
     {
+        // Methodenaufruf : Konstruktor
         Class obj{ 11, 12 };  // obj.m_a => 11, obj.m_b => 12
     }
 
@@ -239,6 +255,8 @@ namespace BraceInitialization {
 
     static void test_10()
     {
+        Point p{ 1, 2 };
+
         Rectangle r1{ {1, 2}, {3, 4} };
         Rectangle r2{ {}, {} };
         Rectangle r3{ };

@@ -47,6 +47,35 @@ Was sind meine Erwartungen
 
 ===========================
 
+Donnerstag:
+
+std::initializer_list
+
+Utility-Klassen:
+   std::optional
+   std::span / std::string_view
+   std::variant ========>  Type Traits
+
+Ausnahmen
+   std::expected
+
+constexpr
+
+Structured Binding:
+
+RAII
+
+UDL:   User Defined Literal
+
+Variadische Template ==> Folding
+
+
+Wenn die Zeit reicht: Spaceship Operator
+
+
+===========================
+
+
 C++ 11
 
 "C lastig geschrieben"
@@ -422,3 +451,441 @@ Move-Semantik
 
 Smart - Pointer
 
+==================================
+
+Soll ich Legacy Code umstellen: NEIN.
+
+==> Fehler möglich !!!
+
+Neuer Code: Up to You: 
+
+==================================
+
+POD: Plain Old Data Type
+
+
+CVTSI2SD — Convert Doubleword Integer to Scalar Double Precision Floating-Point Value
+
+
+Zero-Cost Abstraction
+
+===================================
+
+Verschiebesemantik (Move Semantics):
+
+Hilfsmittel:
+
+Es gibt ab C++ 11 einen neuen, zweiten Referenztyp: RValue
+
+SYNTAX: std::string&&
+
+Whyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy:  Verschiebesemantik
+
+Der "alte" heißt LValue.
+
+SYNTAX: std::string&
+
+Referenz:
+
+Vorab-Thema:
+
+int n = 123;
+
+int& rn = n;     
+
+Point p = { 1, 2 };
+
+Point& rp = p;
+
+"Objekt mit Namen"
+
+Temporäres Objekt: Kein Name vorhanden
+
+
+// ====================================================
+
+Verschiebesemantik:
+
+..: ... fd0
+
+
+
+
+
+BigData::BigData(const BigData& data)
+
+Kopier-Konstruktor   WICHTIG !!!!!!!!!!
+
+Demo:
+
+
+a) ....b70     Zweimal
+
+b) ... 4b0     Wurde überschrieben
+
+
+Gültig: Stammt von einem new (Jepp)  UND WURDE NOCH NICHT mit DELETE freigegeben.
+
+  Ein mit delete freigegebene Adresse ist NICHT MEHR Gültig.
+
+  "double delete"
+
+
+  Rule-of-Three:  Maschinenraum von C++
+
+  ===> Wenn in Objekten, die wir verfasst haben, new in den Instanzvariablen auftritt.
+
+Rule-of-Three habe ich noch nie gesehen:
+
+new: Alternative:   std::vector, ...  (Rule-of-Three im Bauch)
+
+Globale Variablen: kein new
+
+Implizit:  Python:  copy.deepcopy   ===> Analogie:  Rule-of-Three von C++
+
+=========================================================
+
+Verschiebe-Semantik:
+
+1.) .... ef0:   Tmp. Objekt (am Stack)  // wurde freigegeben
+
+2.) .... 120:   Dieses Objekt ist im Vektor
+
+
+Beobachtung:
+
+2 Objekte, um eines davon in den Container zu bekommen !
+
+>> Wert- UND Referenz-Semantik
+
+Ab  C++ 11: Verschiebe-Semantik:
+
+1.) ... ef0
+
+============================================
+
+noexcept
+
+Exception:  throw / catch
+
+Ist eine perfekte Lösung:
+
+Emebedded SW // hoher Performanz- Anforderungen:
+
+Das Laufzeit
+
+Optimierungsmöglichkeit:
+
+throw, aber IM SELBEN Unterprogramm KEIN catch:
+
+Dann wird die Ausnahme zum Rufer propagiert / durchgeschleust / hoch gereicht:
+
+Stack Unwinding:  Mit noexcept abschalten.
+
+Wann kann man sich seiner Sache sicher sein?
+
+zB: Nur Wertzuweisungen.
+
+============================================
+
+Rule of Zero:
+
+== Es dürfen keine Zeiger vorhanden sein, die mit new allokiert wurden.
+
+== Verwenden Sie Container Klassen der STL.
+
+== Es sind auch dynamische Daten  erlaubt (new) 
+   Verwenden Sie Smart Pointer Klassen.
+
+   Diese kümmern sich um den Speicher selbst.  // delete
+
+
+VORSICHT:
+
+Deklarieren oder definieren Sie dann keine Operationen der Rule of Three
+oder Rule of Five für Ihre Klasse.
+
+Hmmm, ist das wichtig ???
+
+
+==============================================================
+
+int* ip = new int[10];
+
+Problem:
+
+
+// delete[] ip;  // irgendwann :))
+
+
+Detected memory leaks!
+Dumping objects ->
+C:\Development\Seminar_Modern_Cpp_August_206\GeneralSnippets\MemoryLeaks\MemoryLeaksDetection.cpp(24) : {153} normal block at 0x000001806FA95BE0, 40 bytes long.
+ Data: <                > CD CD CD CD CD CD CD CD CD CD CD CD CD CD CD CD 
+Object dump complete.
+The program '[26236] Cpp_Modern.exe' has exited with code 0 (0x0).
+
+Das ist das Problem mit new / delete !
+
+Lösung:  Diszipliniertes Arbeiten.
+
+// ================================================================
+
+Alternative:
+
+Kein new / delete verwenden (Ausnahmen).
+
+Idee:
+
+A) C++:  OO  
+
+B) OO:  Klassen:  Konstruktoren / Destruktoren
+
+C) Wann werden Konstruktoren aufgerufen:
+
+   Am Ende der Methode / Scopes  {   }
+
+   // In Java gibt es das nicht ... in Python gibt es das nicht.
+
+D) Man verstecke den Zeiger (new) in einer Wrapper-Klasse (Hüllenklasse)
+
+   Konstruktoren:  da muss der Zeiger irgendwie an die Hülle übergeben werden.
+
+   Destruktor:  delete !!!!!!!!!!!
+
+
+E) Eine erste Umsetzung:  auto_ptr   ==> deprecated.
+
+F) Eine zweite Umsetzung:   2 Strategien
+
+   Mehrere Klassen:
+
+   std::unique_ptr
+   std::shared_ptr und std::weak_ptr
+
+i) Strategie std::unique_ptr:
+
+   Es gibt im laufenden Programm zu einem std::unique_ptr Objekt
+   genau EINEN Besitzer.
+
+   zB: Kann NICHT kopiert werden !
+
+   Man kann durchaus mit einem std::unique_ptr Objekt arbeiten.
+
+i) Strategie std::shared_ptr:
+
+   Es gibt im laufenden Programm von einem std::shared_ptr Objekt
+   MEHRERE Besitzer.
+
+   zB: Kann kopiert werden !
+
+   Hmmm, wer ruft delete auf ??????????????????
+
+   Nicht - trivial:  Für die Anzahl der Besitzer:  Referenz-Zähler
+
+   Erst wenn dieser auf 0 geht, kann delete aufgerufen werden !
+
+   3 => 2 => 1  => 0
+
+   ==> Ähnlichkeiten: Prinzipien eines GCs.
+
+
+===============================================================
+
+
+Kann man das Zurück Kopieren von Objekten aus einer Funktion optimieren ???
+
+Return Value Optimization zum Beispiel
+
+"Stack Frame":
+
+Micro Computer Programming:
+
+Unterprogrammaufruf - Mechanismus:
+
+===============================================================
+
+Go for Smart Pointer
+--------------------
+
+std::unique_ptr
+
+std::shared_ptr
+
+Hmmmmm, eigentlich ist der std::unique_ptr die erste Wahl:
+
+Er legt fest, wer der Besitzer ist !!!
+
+===============================================================
+
+
+std::unique_ptr
+
+std::shared_ptr
+
+Wir haben ein Problem: std::shared_ptr funktioniert nicht immer ?!?!?!?!?!?!?!?!?!?!
+
+
+Problem: Verstehen  // Wie löst er das Problem ???
+
+Problem: Lösung   std::weak_ptr  Wie funktioniert dieser ???
+
+Vorsicht: Der Name lock könnte irritierend / missverständlich sein !?!?!?!?!?
+
+Besser:  access  Noch besser:   std::shared_ptr  tryAccess ()
+
+
+Frage:
+
+Observer - Pattern
+
+Was ist das: Beobachten
+
+a) Zielobjekt:  Hat Zustand (Wetterdaten / Aktienkurse) / kann sich ändern
+
+b) Andere Objekte: Diese interessieren sich für Änderungen am Zielobjekt
+
+c) Um Änderungen mitgeteilt zu bekommen:
+      Andere Objekte melden sich am Zielobjekt an,
+      dieses hebt die angemeldeten Objekte in einer Liste auf (Pointer, ... , Smart Pointer).
+
+
+
+Resumee
+=======
+
+Aus bestimmten Gründen ist der std::unique_ptr ausgeschieden.
+
+std::shared_ptr:
+
+Wie arbeite ich mit der Klasse std::shared_ptr.
+
+Was habe ich zu beachten?
+
+A) Sollte ich in einem Programm ausschließlich  std::shared_ptr Variablen verwenden ???
+
+   Nieeeeeeeeeeeeeeee
+
+b) Beispiel:
+
+   Daten:    std::shared_ptr
+ 
+   Visualisierung:  Worauf sollte eine Visualisierung arbeiten?
+
+   std::weak_ptr:   lock   => empty:   Diese Aktie wird aktuell nicht gehandet / es sind keine Daten verfügbar. 
+
+c) 
+
+Observer - Pattern
+
+Was ist das: Beobachten
+
+a) Zielobjekt:  Hat Zustand (Wetterdaten / Aktienkurse) / kann sich ändern  // std::shared_ptr
+
+b) Andere Objekte: Diese interessieren sich für Änderungen am Zielobjekt   // std::shared_ptr
+
+c) Um Änderungen mitgeteilt zu bekommen:
+      Andere Objekte melden sich am Zielobjekt an,   attach   //  detach
+      dieses hebt die angemeldeten Objekte in einer Liste auf (Pointer, ... , Smart Pointer).
+
+
+	  std::vector  <  std::weak_ptr <IClient>  >
+
+	  Zustandswechsel:  for (  auto&  client : observer)  ==> lock:  empty  ...hmm, den Beobachter gibt es nicht mehr.
+
+
+	Neuer SW: Smart Pointer  ( 14 Tage ... dann hast du die drauf )
+
+	std::shared_ptr: ABER so viel wie möglich std::weak_ptr verwenden .... 
+
+std::shared_ptr:   75%   jaaaaaaaaaaa
+
+std::weak_ptr:     99%   nie gehört
+
+=========================================================
+
+static void lambda_01_modern()
+{
+    std::vector<int> vec{ 1, 2, 3 };
+
+    std::for_each(
+        vec.begin(),
+        vec.end(),
+        [] (auto n) { 
+            std::print("{} ", n);
+        }
+    );
+
+    std::println();
+}
+
+
+Generische Funktionen / Lambdas
+==============================
+
+Erlleichtern die Wartbarkeit / Änderbarkeit des Quellcode
+bei kleinen Änderungen.
+
+auto als Parameter // der Compiler macht den Rest.
+
+Wiederholung: auto
+
+a) Vereinbarung von Variablen 
+
+b) Rückgabetyp (Lambdas)
+
+c) Als Parameter
+
+====================================
+
+Blick auf Python:
+
+def say_hello(count, message):   <===== Referenzen ( alle 8 Bytes )
+
+
+    // Stack Frame: Als Wert
+    // count:         8 Bytes
+    // message:       8 Bytes
+
+
+	Die Werte hinter den Referenzen sind am HEAP
+
+======================================
+
+Range-based for Loop
+
+12 ways to iterate through a vector 
+
+Hmmm, das hat viel mit der Historie von C++ zu tun.
+
+==============================================
+
+Müssen STL Algorithmen wirklich sein ???
+
+Einsteiger .................
+
+==============================================
+
+C++:  Debug-Modus // Release-Modus
+
+Debug-Modus
+Viele Debug Informationen
+Optimierung: Eher schlecht
+
+ Release-Modus
+ Kleineres Footprint vom Executable
+ Debuggen geht nicht
+ Optimierung: Sehr stark.
+
+ Warum gibt es zwischen std::array und std::vector
+ so große Unterschiede ??????????????????
+
+ MMU:  Memory Management Unit
+
+ A) Deine Arrays liegen im globalen Segment // ist / könnte geladen sein
+
+ B) Deine Vektor-Daten liegen am Heap // MMU: Virtueller Speicher
+
+ Beobachtung:  Hmmm, dynamische Variablen haben einen gewissen Preis.
+
+ ========================================

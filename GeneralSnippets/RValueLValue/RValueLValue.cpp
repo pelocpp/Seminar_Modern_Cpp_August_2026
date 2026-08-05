@@ -19,23 +19,26 @@ namespace LValueRValue {
     static void test01() {
 
         std::string a = "Hello";
+
         std::string b = " World";
 
         sayHello(a);
-        sayHello(a + b);
+
+        sayHello(a + b);  // a + b:  std::string // +   Konkatenation // "Hello World" // Temp. Objekt
     }
 
     // -------------------------------------------------------------------
 
     static void helper(std::string&& message)
     {
-        sayHello(message);
-        // sayHello(std::move(message));    // casting an lvalue to an rvalue
+        sayHello( std::move( message ) );    // a) std::string&& : RVALue:   Typ Gleichheit
+
+                              // b) message: Das anonyme Objekt hat einen Namen bekommen  ==> std::string&
     }
 
     static void test02()
     {
-        helper(std::string("Where are we going ..."));
+        helper(std::string("Hello"));
     }
 
     // -------------------------------------------------------------------

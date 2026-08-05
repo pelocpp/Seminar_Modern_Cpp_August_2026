@@ -80,10 +80,11 @@ namespace WeakPointer {
      * c) Both smart pointer are std::weak_ptr's    ==> All d'tors are called
      */
 
+
     class ParentNode {
     private:
-        std::shared_ptr<RightNode> m_rightNode;   // <== shared or weak ?
-        std::shared_ptr<LeftNode> m_leftNode;     // <== shared or weak ?
+        std::weak_ptr<RightNode> m_rightNode;   // <== shared or weak ?
+        std::weak_ptr<LeftNode> m_leftNode;     // <== shared or weak ?
 
     public:
         ParentNode() {
@@ -92,10 +93,10 @@ namespace WeakPointer {
         ~ParentNode() {
             std::println("d'tor ParentNode");
         }
-        void setRightNode(const std::shared_ptr<RightNode> right) {
+        void setRightNode(const std::shared_ptr<RightNode>& right) {
             m_rightNode = right;
         }
-        void setLeftNode(const std::shared_ptr<LeftNode> left) {
+        void setLeftNode(const std::shared_ptr<LeftNode>& left) {
             m_leftNode = left;
         }
     };
@@ -105,7 +106,7 @@ namespace WeakPointer {
         std::shared_ptr<ParentNode> m_parentNode;
 
     public:
-        explicit RightNode(std::shared_ptr<ParentNode> parent)
+        explicit RightNode(const std::shared_ptr<ParentNode>& parent)
             : m_parentNode{ parent } {
             std::println("c'tor RightNode");
         }
@@ -120,7 +121,7 @@ namespace WeakPointer {
         std::shared_ptr<ParentNode> m_parentNode;
 
     public:
-        explicit LeftNode(std::shared_ptr<ParentNode> parent)
+        explicit LeftNode(const std::shared_ptr<ParentNode>& parent)
             : m_parentNode{ parent } {
             std::println("c'tor LeftNode");
         }
@@ -133,6 +134,7 @@ namespace WeakPointer {
     static void test_02()
     {
         std::shared_ptr parent{ std::make_shared<ParentNode>() };
+
         std::shared_ptr rightNode{ std::make_shared<RightNode>(parent) };
         std::shared_ptr leftNode{ std::make_shared<LeftNode>(parent) };
 
@@ -140,9 +142,9 @@ namespace WeakPointer {
         parent->setLeftNode(leftNode);
 
         // some informations output
-        std::println("Reference-Count parent:    {}", parent.use_count());
-        std::println("Reference-Count rightNode: {}", rightNode.use_count());
-        std::println("Reference-Count leftNode:  {}", leftNode.use_count());
+        //std::println("Reference-Count parent:    {}", parent.use_count());
+        //std::println("Reference-Count rightNode: {}", rightNode.use_count());
+        //std::println("Reference-Count leftNode:  {}", leftNode.use_count());
     }
 }
 
@@ -150,7 +152,7 @@ void main_weak_pointer()
 {
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
     using namespace WeakPointer;
-    test_01();
+  //  test_01();
     test_02();
 }
 
