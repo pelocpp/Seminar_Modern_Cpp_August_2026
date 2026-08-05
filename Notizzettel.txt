@@ -1,0 +1,424 @@
+============================
+
+Seminar Modern C++
+
+Peter Loos
+
+30+ Jahre:  SW-Entwicklung / Training
+
+Pascal, C/C++, Java, C#, Python, Mobile Progr. (Android (Java), Flutter (Dart)) 
+
+Back-to-the-Roots: C/C++
+
+Guten Morgen 
+
+===========================
+
+10.30 ...
+
+12.30 Mittagpause ---
+
+15 ...
+
+17 ...
+
+===========================
+
+Online:
+
+== Visual Studio Community: MSVC
+== Visual Code:  GCC , MinGW, ...
+
+== Github
+
+===========================
+
+Inhalt:
+
+Agenda
+
+==> Was soll es sein
+
+Was MUSS DRIN sein
+
+Was muss nicht drin sein ...
+
+Was sind meine Erwartungen
+
+===========================
+
+C++ 11
+
+"C lastig geschrieben"
+
+"Wie macht man es gut"
+
+Im Sinne neuer Techniken ....
+
+Pass-by-Referenz ?!?
+Pass-by-Value    ?!?
+
+Werte-Semantik vs. Referenz-Semantik
+
+Interfaces
+
+Templates
+
+Beispiel für modernen C++ Code
+
+STL:  std::vector
+
+== Container: Ja
+== Algorithmen: Eher nein
+
+== Vergleich mit Python
+
+== Typsicherheit:
+
+   Memory Overflow
+
+== new / delete: Dynamische Daten
+
+==========================================
+
+auto, STL, Algothmen
+
+STL Iterator 
+
+==========================================
+
+Unsere Agenda:
+--------------
+
+"Wie macht man es gut"
+
+a) Kern C++
+
+b) STL - Verständnis
+
+   C++ OHNE STL:  Neeeeeeeeeee
+
+c) auto, Lambda, ...
+
+d) Wert-Semantik, Referenz-Semantik
+
+Die Zusatz-Dateien:   Seminar_01_Thema_...
+
+=======================
+
+STL: 
+
+= Container
+= Iteratoren
+= Algorithmen
+= Aufrufbare Objekte
+
+Parcours:
+
+a) Klassisch // "veraltet" // Vor C++ 11
+
+b) Modern // mit neuen Konzepten
+
+=========================
+
+Namensraum  // namespace
+
+Die ganze STL befindet sich in einem Namensraum: std   // Standard
+
+void main_seminar_stl_introduction()
+{
+    using namespace std;
+    vector<int> numbers;
+}
+
+I wouldn't go for this !!!!!!!!!!
+
+======================
+
+Go for std::size_t
+
+    for (int i = 0; i != 100; i++) {
+
+	for (std::size_t i = 0; i != 100; i++) {
+
+Whyyyyyyyyyy
+
+Etwas pedantisch:  i kann negative Werte annehmen.
+
+VORSICHT:
+
+std::size_t n;
+
+std::size_t n = -1;   // Das GEHT NICHT !!!!!!!!!!!!
+
+
+if (n >= 0)           Shit;     n ist IMMER groesser gleich 0
+
+========================================
+
+Zu std::vector:
+
+https://github.com/pelocpp/cpp_clean_performant_secure/blob/master/Clean_Performant_Code/Data_Structures_and_Algorithms/Readme_STL_Container.md#link4
+
+
+Ein std::vector ist sehr ähnlich zu einer Python  list.
+
+Länge ist dynamisch:
+
+l.append();   // Python
+
+v.push_back();   // C++
+
+neue Cap. = alte Cap. * 1.5;
+
+Go for reserve, um unnötige Allokationen zu vermeiden.
+
+==========================================
+
+for-Schleife in Python:
+
+range    // Schrittweite
+
+==========================================
+
+Gedanke der STL:
+
+Transparenz / Austauschbarkeit von Containern.
+
+
+Feature: STL Iterator
+
+STL Iterator  ===> Was ist das ?? Was beschreibt das ?? 
+
+===>  Eine Position in einem STL Container
+
+Wie kommen wir zu einer Position:
+
+STL Container:  begin(), end()
+
+Von welchem Typ ist so eine Position ???
+
+Idee: Jeder Container bringt den Typ für die Position mit :)
+
+Nebenbemerkung: using // typedef
+
+==========================================
+
+Was kann / hat eine Position:
+
+Methoden:  Position ist NICHT der Wert an der Position.
+
+pos.value();
+pos.next();
+
+Hätte man so machen können:
+
+Operatoren:  Besser lesbar.  Ja, durchaus ..............
+
+pos.value();     // *pos
+pos.next();      // pos ++;
+
+
+====================================================
+
+Aufrufbare Objekte
+
+Was ist ein aufrufbares Objekt ???
+
+Why ???????????????????????????????????
+
+Um über Objekte Zugriff auf Instanzvariablen zu erhalten:  OO
+
+
+a) Wir brauchen diesen Operator 
+
+b) Man hätte auch das Feature über eine Methode realisieren können.
+
+
+Wann brauche ich einen aufrufbaren Operator ??
+
+Zusatzinformationen:
+
+Beispiel:
+
+Suchen:  find_if 
+
+template< class InputIt, class UnaryPred >
+InputIt find_if( InputIt first, InputIt last, UnaryPred p );
+
+	unary predicate which returns ​true for the required element.
+
+	bool (int parameter) ;    // Was wird eigentlich gesucht.
+
+	int what muss in das aufrufbare Objekt als Instanzvariable
+
+    std::find_if(
+        numbers.begin(),
+        numbers.end(),
+        myPrinter
+    );
+
+Bin jetzt bei aufrufbaren Objekten angekommen:   Lambdas !!!!!!!!!!!!!!!!!!!!!!!!!!
+
+=========================================================
+
+Was können wir besser machen:
+
+
+A) Syntax
+
+    std::vector<std::size_t>::iterator pos = numbers.begin();
+    std::vector<std::size_t>::iterator end = numbers.end();
+
+B) SYNTAX:
+
+    std::for_each(
+        numbers.begin(),
+        numbers.end(),
+        myPrinter    // egal ob freie Funktion oder Callable
+    );
+
+==========================================================
+
+Referenz: Hmmmmmmmm ... nicht ganz klar .........
+
+Ist eine Python- und eine C++-Referenz IN ETWA dasselbe ????
+
+NEIN
+
+Why ??????????????????????????????????????
+
+C++
+
+Eine Referenz ist ein Stellvertreter für eine VORHANDE Variable
+
+int n = 123;
+
+int& rn = n;   // Hinter den Kulissen: in rn ist die Adresse von n
+
+Python:
+
+==========================================================
+
+Stack und Heap
+
+void malZwei(int value)
+{
+    int m = value;
+00007FF7791A79BF  mov         eax,dword ptr [value]  
+00007FF7791A79C5  mov         dword ptr [m],eax  
+
+
+
+void malZweiEx(int& value)
+{
+    int m = value;
+00007FF778FDE400  mov         rax,qword ptr [value]    // Indirektion
+00007FF778FDE407  mov         eax,dword ptr [rax]  
+00007FF778FDE409  mov         dword ptr [m],eax  
+
+
+
+
+Heap: Wird in C++ durch new / delete erreicht / verwaltet ....
+
+Python: Einfacher: ALLE WERTE sind am Heap
+
+Am Stack: Ausschließlich nur Adressen / Referenzen, die auf die Daten auf dem Heap zeigen.
+
+
+// =======================================================================================
+
+Werte- versus Referenz-Semantik:
+-------------------------------
+
+>>> Referenz: auf den richtigen Pfad bringen: Go for References soweit wie möglich !!!! C++
+
+============================================
+
+auto:
+
+Tritt - SYNTAX - an DREI verschiedenen Stellen auf:
+
+a) Vereinbarung von Variablen
+
+B) Rückgabetyp
+
+C) Parameter
+
+===============================
+
+// old, "classical" syntax
+std::string toString(int value);
+
+// new syntax with trailing return type
+auto toString(int value) -> std::string;
+
+Whyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+
+Antwort: Hat nichts mit "normalen" Funktionen zu tun !
+
+Sondern: Hintergrund ist die generische Programmierung.
+
+Man kann den Ergebnistyp "berechnen" mit decltype.
+
+============================================
+
+Wiederholung:
+
+In C++: Implizite Typkonvertierung
+
+int + double ==> double
+
+int + long ==> long
+
+short + int ==> int
+
+etc.
+
+============================================
+============================================
+
+Lamdas
+------
+
+Wie sieht der C++ Compiler einen Lambda-Ausdruck:
+
+Beobachtung:
+
+"Lambda-Funktion"
+
+FALSCH !!!!!!!!!!!!
+
+Was denn dann ???
+
+Ein Lambda ist ein OBJEKT !!!!!!!!!!!!!!!!!!!
+
+Cpp Insights 
+
+void test()
+{
+    std::string s{ "Hello" };
+
+    auto func = [=]() { std::print("{}", s); };
+
+    func();
+}
+
+
+Okay, ein Lambda ist ein Objekt:
+
+Was haben Objekte ???
+
+Methoden und Eigenschaften (Instanzvariablen)
+
+=====================================================
+
+Initialisierung
+
+std::initializer_list
+
+Move-Semantik
+
+Smart - Pointer
+
