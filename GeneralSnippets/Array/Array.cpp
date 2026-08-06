@@ -2,6 +2,11 @@
 // Array.cpp // std::array // std::to_array // std::span
 // =====================================================================================
 
+module;
+
+#include <span>
+#include <vector>
+
 module modern_cpp:class_array;
 
 namespace StdArray {
@@ -10,6 +15,8 @@ namespace StdArray {
     // initialization
 
     static void test_01() {
+
+        // int numbers[10];
 
         // initialization variants
         [[maybe_unused]] std::array<int, 5> array1;
@@ -21,6 +28,8 @@ namespace StdArray {
         std::array<int, 5> array4 = { 1, 2, 3, 4, 5 };  // initializer list
 
         std::array array5 = { 1, 2, 3, 4, 5 };          // CTAD - type is deduced to std::array<int, 5>
+    
+        std::vector vec = { 1, 2, 3, 4, 5 };   // Class Template Argument Deduction // c++ 20
     }
 
     // -------------------------------------------------------------------
@@ -75,10 +84,12 @@ namespace StdArray {
     // -------------------------------------------------------------------
     // passing std::array as parameter
 
+    // freie Funktion
     static void print(const std::array<int, 5>& array) {
         std::println("Length: {}", array.size());
     }
 
+    // Schablone
     template<typename T, int Length>
     void print(const std::array<T, Length>& array) {
         std::println("Length: {}", array.size());
@@ -209,9 +220,9 @@ namespace StdArray {
         // copying via operator= isn't supported:
         // array type 'std::string [4]' is not assignable
         std::string other[4];
-        // other = cArray;  
+      //  other = cArray;  
 
-        // algorithm std::copy works
+        // algorithm std::copy works //  no for-loop
         std::copy(
             std::begin(cArray),
             std::end(cArray),
@@ -244,6 +255,7 @@ namespace StdArray {
 
         // copying via operator= is supported ... in linear time
         std::array<std::string, 4> other;
+
         other = array;
 
         // operator== compiles and does expected value comparison of all array elements!
@@ -345,7 +357,7 @@ namespace StdArray {
     // --------------------------------------------------------------------
     // demonstrating printArray with std::span parameter
 
-    static void printArray(std::span<int> values) {
+    static void printArray(std::span<int> values) {  // Hmmm: Vector, Array, welche Form von Array
 
         std::println("Number of elements: {}", values.size());
         std::println("Size of span:       {}", values.size_bytes());
@@ -359,23 +371,23 @@ namespace StdArray {
 
     static void test_31() {
 
-        //int carr[]{ 1, 2, 3, 4, 5 };
-        //printArray(carr);
-
-        //std::array arr{ 6, 7, 8, 9, 10 };
-        //printArray(arr);
-
-        //std::vector<int> vec{ 1, 3, 5, 7, 9 };
-        //printArray(vec);
-
         int carr[]{ 1, 2, 3, 4, 5 };
-        printArray(std::span{ carr });
+        printArray(carr);
 
         std::array arr{ 6, 7, 8, 9, 10 };
-        printArray(std::span{ arr });
+        printArray(arr);
 
-        std::vector vec{ 1, 3, 5, 7, 9 };
-        printArray(std::span{ vec });
+        std::vector<int> vec{ 1, 3, 5, 7, 9 };
+        printArray(vec);
+
+        //int carr[]{ 1, 2, 3, 4, 5 };
+        //printArray(std::span{ carr });
+
+        //std::array arr{ 6, 7, 8, 9, 10 };
+        //printArray(std::span{ arr });
+
+        //std::vector vec{ 1, 3, 5, 7, 9 };
+        //printArray(std::span{ vec });
     }
 
     // --------------------------------------------------------------------
@@ -403,27 +415,44 @@ namespace StdArray {
         std::vector vec{ 1, 3, 5, 7, 9 };
         printArrayConst(vec);
     }
+
+    static void test_33() {
+
+        std::vector vec{ 1, 3, 5, 7, 9 };
+
+        std::span spanne{ vec };
+
+     //   printArray(spanne);
+        printArray(vec);
+
+        vec.push_back(11);
+
+     //   printArray(spanne);
+        printArray(vec);
+    }
 }
 
 void main_array()
 {
     using namespace StdArray;
 
-    test_01();
-    test_02();
-    test_03();
-    test_04();
-    test_05();
-    test_06();
-    test_07();
-    test_08();
-    test_09();
-    test_10();
-    test_11();
-    test_20();
-    test_30();
-    test_31();
-    test_32();
+    //test_01();
+    //test_02();
+    //test_03();
+    //test_04();
+    //test_05();
+    //test_06();
+    //test_07();
+    //test_08();
+    //test_09();
+    //test_10();
+    //test_11();
+    //test_20();
+    //test_30();
+    //test_31();
+    //test_32();
+
+    test_33();
 }
 
 // =====================================================================================

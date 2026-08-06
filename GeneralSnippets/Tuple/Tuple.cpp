@@ -88,7 +88,7 @@ namespace TupleSamples {
         Row row2{ 11, 'B', 2.22, "Sepp" };
         Row row3{ 12, 'C', 3.33, "Hans" };
 
-        std::vector<Row> mySheet;
+        std::vector<std::tuple<int, char, double, std::string>> mySheet;
 
         mySheet.push_back(row1);
         mySheet.push_back(row2);
@@ -102,6 +102,7 @@ namespace TupleSamples {
         std::println("Value: {}", val);
         std::println("Name:  {}", name);
 
+        // Range-based for-Loop & C++ 17: structured binding
         for (const auto& [id, abbr, val, name] : mySheet)
         {
             std::println("Id:    {}", id);

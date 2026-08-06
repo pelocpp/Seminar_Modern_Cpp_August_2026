@@ -11,6 +11,41 @@ module modern_cpp:const_expr;
 // =====================================================================================
 // variables
 
+
+namespace ConstExpr_Seminar {
+
+    void test_more_lambdas()
+    {
+        [] {};    // shortest lambda on earth
+
+        []() {};
+
+        auto l = []() {};
+
+        l();
+
+        [](int a, int b) { return a + b; };
+
+        auto adder = [](int a, int b) { return a + b; };
+
+        auto result = adder(1, 2);
+
+         [](int a, int b) constexpr { return a + b; };
+
+         constexpr auto compileTimeAdder =  [](int a, int b) constexpr { return a + b; };
+
+         constexpr auto res2 = compileTimeAdder(11, 12);
+
+         constexpr auto mul = [](int a, int b) constexpr { return a * b; }  (3, 5) ;
+
+         constexpr auto mul2 = [](auto a, auto b) constexpr { return a * b; }  (3.3, 5.4);
+
+    }
+
+
+}
+
+
 namespace ConstExprVariables {
 
     constexpr double Pi = 3.14159265359;
@@ -161,7 +196,7 @@ namespace ConstExprClassesAndObjects {
 
     public:
         // c'tors
-        constexpr Complex() : m_real{ }, m_imag{ } {}
+        constexpr Complex() : m_real{ }, m_imag{ } { }
         constexpr Complex(float real, float imag) : m_real{ real }, m_imag{ imag } {}
 
         // getter
@@ -293,6 +328,8 @@ namespace ConstExprPow {
 
 void main_constexpr()
 {
+    ConstExpr_Seminar::test_more_lambdas();
+
     ConstExprVariables::testVariables();
     ConstExprFunctions::testFunctions();
     ConstExprClassesAndObjects::testComplex();

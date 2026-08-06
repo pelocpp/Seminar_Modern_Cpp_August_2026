@@ -6,6 +6,7 @@ module;
 
 #include <variant>
 #include <print>
+#include <type_traits>
 
 module modern_cpp:variant;
 
@@ -103,14 +104,41 @@ namespace VariantDemo {
             double d = std::get<double>(v);
             std::println("double! ", d);
         }
-        catch (std::bad_variant_access&)
+        catch (std::bad_variant_access& ex)
         {
-            std::println("Variant doesn't hold a double at this moment ...");
+            std::println("Variant doesn't hold a double at this moment: {}", ex.what());
         }
 
         v = 123;
         std::println("{} - Value: {}", v.index(), std::get<int>(v));
     }
+
+    // -------------------------------------------------------------------
+
+    // Understanding
+
+    // primary template
+
+    template <class T>
+    struct my_remove_reference
+    {
+        using type = T;
+    };
+
+    // template specialization: T = short
+    template <>
+    struct my_remove_reference<short>
+    {
+        using type = short;
+    };
+
+    // secondary template: naja, Begriff ist von mir, den gibt es so nicht .......
+    // template specialization
+    template <class T>
+    struct my_remove_reference<T&>
+    {
+        using type = T;
+    };
 
     // -------------------------------------------------------------------
 
@@ -120,7 +148,30 @@ namespace VariantDemo {
 
         // using a generic visitor (matching all types in the variant)
         auto visitor = [](const auto& elem) {
-            std::println("{}", elem);
+
+            using ElemType = decltype (elem);
+
+            using ElemTypeWithoutReference = my_remove_reference  /*std::remove_reference*/<ElemType>::type;
+            
+            using ElemTypeWithoutReferenceAndConst = std::remove_const<ElemTypeWithoutReference>::type;
+
+            if constexpr (std::is_same<int, ElemTypeWithoutReferenceAndConst> ::value == true )
+            {
+                std::println("int: {}", elem);
+            }
+            else if constexpr (std::is_same<double, ElemTypeWithoutReferenceAndConst> ::value == true)
+            {
+                std::println("double: {}", elem);
+            }
+            else if constexpr (std::is_same<std::string, ElemTypeWithoutReferenceAndConst> ::value == true)
+            {
+                std::println("std::string: {}", elem);
+                std::size_t len = elem.size();
+            }
+            else
+            {
+                std::println("Unbekannt: {}", elem);
+            }
         };
 
         std::visit(visitor, var);
@@ -342,17 +393,17 @@ void main_variant()
 {
     using namespace VariantDemo;
 
-    test_01();
-    test_02();
-    test_03();
+    //test_01();
+    //test_02();
+    //test_03();
     test_04();
-    test_05();
-    test_06();
-    test_07();
-    test_08();
-    test_09();
-    test_10();
-    test_11();
+    //test_05();
+    //test_06();
+    //test_07();
+    //test_08();
+    //test_09();
+    //test_10();
+    //test_11();
 }
 
 // =====================================================================================

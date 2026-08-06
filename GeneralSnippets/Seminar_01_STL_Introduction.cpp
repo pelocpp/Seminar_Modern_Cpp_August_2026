@@ -48,6 +48,8 @@ void main_seminar_stl_introduction_03()
     std::vector<std::size_t> numbers;
     //std::list<std::size_t> numbers;
 
+    std::vector<std::size_t>::value_type m;
+
     numbers.push_back(1);
     numbers.push_back(2);
     numbers.push_back(3);

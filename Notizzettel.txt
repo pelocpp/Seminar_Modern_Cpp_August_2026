@@ -4,6 +4,14 @@ Seminar Modern C++
 
 Peter Loos
 
+peter.loos@gmx.de
+-----------------
+
+https://github.com/pelocpp
+
+https://github.com/pelocpp/cpp_modern
+
+
 30+ Jahre:  SW-Entwicklung / Training
 
 Pascal, C/C++, Java, C#, Python, Mobile Progr. (Android (Java), Flutter (Dart)) 
@@ -11,16 +19,6 @@ Pascal, C/C++, Java, C#, Python, Mobile Progr. (Android (Java), Flutter (Dart))
 Back-to-the-Roots: C/C++
 
 Guten Morgen 
-
-===========================
-
-10.30 ...
-
-12.30 Mittagpause ---
-
-15 ...
-
-17 ...
 
 ===========================
 
@@ -49,26 +47,25 @@ Was sind meine Erwartungen
 
 Donnerstag:
 
-std::initializer_list  : Jepp
+std::initializer_list          : Jepp
 
 Utility-Klassen:
-   std::optional   : Jepp
-   std::span / std::string_view
-   std::variant ========>  Type Traits
+   std::optional               : Jepp
+   std::span / std::string_view: Jepp
+   std::variant                : Jepp
 
 Ausnahmen
-   std::expected : Jepp
+   std::expected              : Jepp
 
-constexpr  // vs #ifdef
+constexpr  // vs #ifdef         : Jepp
 
-Structured Binding:
+Structured Binding:      : Jepp
 
-RAII : Jepp
+RAII                           : Jepp
 
 UDL:   User Defined Literal
 
 Variadische Template ==> Folding
-
 
 Wenn die Zeit reicht: Spaceship Operator
 
@@ -966,6 +963,243 @@ Destruktor ===> close(), detach(), disconnect(), ..
 
 =================================================================
 
+constexpr
+
+        constexpr Complex c3{ c1 + c2 };
+00007FF78557C3E0  movss       xmm0,dword ptr [__real@40800000 (07FF78580F5DCh)]  
+00007FF78557C3E8  movss       dword ptr [c3],xmm0  
+00007FF78557C3F0  movss       xmm0,dword ptr [__real@40a00000 (07FF78580F5E0h)]  
+00007FF78557C3F8  movss       dword ptr [rbp+8Ch],xmm0  
+
+        /*constexpr*/ Complex c3{ c1 + c2 };
+00007FF7414FC16F  lea         r8,[c2]  
+00007FF7414FC173  lea         rdx,[c3]  
+00007FF7414FC17A  lea         rcx,[c1]  
+00007FF7414FC17E  call        ConstExprClassesAndObjects::Complex::operator+ (07FF7414650B2h)  
+
+
+CRC
+
+Prüfsummen // Checks:  Datenübertragung
+
+==================================================================
+
+
+Arrays:
+
+int numbers [10];
+
+std::array <int, 10> numbers;
+
+Go for std::array :)
+
+Whyyyyyyyyyyyyyyyyyyyyyyyy
+
+i) Länge ist mit dabei !!!!!!!!!!
+
+ii) Kann falsche Indices durch Exception Handling finden
+
+    Optimierung:
+
+	numbers.at (n)  MIT Exception Handling
+
+	numbers[n]      Ohne Exception Handling
+
+numbers[n]   // n muss korrekt sein  ............
+
+
+ 
+Frage:
+
+
+static void print (const std::array<int, 5>& array) {   Hmmmm, und Felder der Länge 6 ????? NO
+
+
+iii) Range-Based Loop
+
+iv) Size
+
+v)  Methoden wie fill
+
+==========================================
+
+
+void print (const std::array<int, 5>& array)
+
+Geht prinzipiell, ist aber irgendwie restriktiv
+
+void print (std::array<int>  , Länge flexibel)
+
+NEUE Utility-Klasse:   std::span   // Spanne: Bereich:  Viele Zahlen in einem Bereich (0 ..10)
+
+Worauf kann man std::span anwenden:
+
+Bzw. was ist in einem std::span Objekt drin ????
+
+2 DATEN:
+
+a) Anfangs-Adresse
+b) Länge ( sowohl in Bytes als in Typ-Einheiten / int )
+
+i) C-Array:
+
+int numbers[10];
+
+std::span<int> spanne (numbers);  
+
+ii) STL-Array:
+
+std::array <int, 10> feld;
+
+std::span<int> spanne (feld);
+
+ii) STL-Vector:
+
+std::vector <int>  vec;
+
+std::span<int> spanne (vec);   // .size()
 
 
 
+// =============================================================
+
+std::tuple    Ähnlich zu Python  Tupel
+
+std::vector   Ähnlich zu Python List
+
+
+Dictionary: Warum ist der Schlüssel (Key) schneller  ==> Hash-Funktion: Berechnet einen Index.
+
+std::unordered_map
+
+Structured Binding
+
+// =============================================================
+
+Was ist std::variant ??
+
+Excel - Sheet:   Zelle / Cell             ==> std::variant 
+
+Was steht da drin: Wert, aber der Datentyp kann unterschiedlich sein:
+
+   Ganzzahlig, Gleitpunkt (Number), Zeichenkette, Datum, Währung , Uhrzeit, Datum & Uhrzeit , ...
+
+
+Feature: Man kann einen Variant besuchen :)
+
+Arbeiten mit Typen: Reflection (C#, Java)
+
+C++: Reflection für Arme.
+
+Ein zweites if:
+
+if des Übersetzers / für den Übersetzer:  if constexpr
+
+Dieses if wird nur vom Übersetzer ausgeführt: No Machine Code.
+
+Bedingung:  Compile Time
+
+
+Werkzeuge des Metaprogramming:  Anwendungsfall von Template Specialization.
+
+Viele Klassentemplates (std::is_same,  std::remove_reference)
+
+if constexpr
+
+==========================
+
+"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+
+Wo liegt diese Zeichenkette im Programm / im Speicher ???
+
+A) std::string s = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";  HEAP
+
+B) const char* cp = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+
+C) std::string_view sv = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"; 
+
+NICHT am Heap.
+
+Whyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+
+A) HEAP
+
+B) NICHT am Heap.  Vermutlich: Globales Datensegment oder Code Segment.
+
+Wann verwenden wir A) oder B).
+
+Für "statische" / "konstante" Zeichenketten, die sich nicht verändern,
+verwende const char*.
+
+Fremdsprachenfähig: 
+
+Schneller, weil nicht Heap.
+
+Wann std::string: Wenn du Zeichenkettenverarbeitung.
+
+         insert,  append, concat,: Die Zeichenkette verändert sich !!!
+
+Für const char* gibt es etwas besseres:  std::string_view.
+
+Auch ein string_view - wie std::span - ist ein non owning Object.
+
+
+
+
+Womit hat std::tuple Ähnlichkeit ??????????
+
+Ähnlich zu einer Struktur 
+
+Ist wie eine Struktur für Schreibfaule.
+
+
+Mit structured binding haben wir auch hier Namen der Elemente.
+
+===============================================================
+
+Compiler Bau :  Lexikon, Grammatik (Syntax), Semantik
+
+C++:  Man kann das Lexikon erweitern.
+
+operator ""
+
+int distance = 100;
+
+int distance = 100_km;
+
+int distance = 100_m;
+
+123.123f
+
+200_kg
+
+200_pound
+
+200_kilometer
+
+0xFF0000_farbe
+
+Technologische Konstanten
+
+345_euros
+
+34_cent
+
+234.34_betrag
+
+234.343245345_betrag
+
+0xFF0000_farbe   ==> unsigned int   // Klasse Color
+
+0xFF0000_rgb   ==> unsigned int   // Klasse Color
+
+================================
+
+constexpr: Wie ist das realisiert ?????????????
+
+MSVC:  Wenig Infos .......
+
+CLANG: 
+
+================================
+================================

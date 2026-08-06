@@ -2,9 +2,33 @@
 // StringView.cpp // Klasse std::string_view
 // =====================================================================================
 
+module;
+
+#include <string_view>
+
 module modern_cpp:string_view;
 
 namespace StringViewDemonstration {
+
+    static void test_00()
+    {
+        const char* cp = "AAAAAAAAAAAAAAAAAAAAAAAAAAAA";  //Read-Only Darstellung haben
+        // cp[0] = '!';
+
+        std::string_view sv{ "AAAAAAAAAAAAAAAAAAAAAAAAAAAA" };  // Konstante Zeichenkette
+
+        // sv[0] = '!';
+
+        std::string_view part = sv.substr(2, 4);
+
+        // part[0] = '"';
+
+        auto len1 = sizeof(cp);
+        auto len2 = std::strlen(cp);
+        auto len3 = sv.length();
+
+        return;
+    }
 
     static void test_01()
     {
@@ -18,6 +42,8 @@ namespace StringViewDemonstration {
 
     static void test_02()
     {
+        // Bad Example 
+
         std::string s{ "AAAAAAAAAAAAAAAAAAAAAAAAAAAA" };
 
         std::string_view sv{ s };
