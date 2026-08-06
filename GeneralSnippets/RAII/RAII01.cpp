@@ -6,9 +6,11 @@ module modern_cpp:raii;
 
 import :dummy;
 
+// #include <Dummy.h>
+
 namespace RAIIDemo {
 
-    template <class TFinalizer>
+    template <typename TFinalizer>
     class RAII {
     public:
         // c'tor
@@ -38,7 +40,14 @@ namespace RAIIDemo {
                 return;
             }
 
-            RAII raii{ [&]() { delete ptr; } };
+
+            // .............................
+            // mit ptr arbeiten
+
+            // delete ptr; aufgerufen werden
+            // ABER: Das wollen wir automatisieren // secure machen
+
+            RAII raii{ [=] () { delete ptr; } };
         }
 
         std::cout << "Done." << std::endl;

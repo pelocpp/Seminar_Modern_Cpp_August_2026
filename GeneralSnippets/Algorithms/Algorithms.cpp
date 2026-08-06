@@ -42,12 +42,12 @@ namespace Algorithms {
 
             std::vector<double> values(VectorSize);
 
-            ScopedTimer watch{};
+            ScopedTimer watch{};   //  c'tor
 
             for (std::size_t i{}; i != values.size(); ++i) {
                 values[i] = 123.0;
             }
-        }
+        }   // destructor
 
         static auto test_vector_constant_initialize_iterator_based()
         {

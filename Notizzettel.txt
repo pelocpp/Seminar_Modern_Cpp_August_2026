@@ -49,21 +49,21 @@ Was sind meine Erwartungen
 
 Donnerstag:
 
-std::initializer_list
+std::initializer_list  : Jepp
 
 Utility-Klassen:
-   std::optional
+   std::optional   : Jepp
    std::span / std::string_view
    std::variant ========>  Type Traits
 
 Ausnahmen
-   std::expected
+   std::expected : Jepp
 
-constexpr
+constexpr  // vs #ifdef
 
 Structured Binding:
 
-RAII
+RAII : Jepp
 
 UDL:   User Defined Literal
 
@@ -889,3 +889,83 @@ Optimierung: Eher schlecht
  Beobachtung:  Hmmm, dynamische Variablen haben einen gewissen Preis.
 
  ========================================
+
+ Brace Init.
+
+ VORSICHT:    Konstruktoren:  ()  => {}
+
+ Brace Init geht nicht immer !!!!!!!!!!!
+
+
+ ACHTUNG:
+
+ std::vector<int> numbers { 10 };   // Size: 1 - Wert: 10
+
+ vs
+
+ std::vector<int> numbers ( 10 );   // Size: 10 - 10 Werte mit dem Wert 0
+
+=======================================================
+
+std::optional:
+
+Monadic Interface
+
+
+int wert;
+
+...
+
+if (wert == 0) ....
+  hhhhm 0 könnte ein zulässiger Wert sein
+
+if (wert == -1) ....
+  hhhhm -1 könnte ein zulässiger Wert sein
+   
+VORSICHT: std::size_t
+
+
+if (wert == MAX_INT) ....
+  hhhhm -1 könnte ein zulässiger Wert sein
+
+int wert;
+bool isValid;   //  nullopt
+
+Zeichenkette: ""
+
+=======================================================
+
+Resources:
+
+Betriebssystem:
+
+Socket,  SqlConnection, FILE, 
+
+a) open(), attach(), connect()
+
+b) close(), detach(), disconnect():  
+
+SqlConnection:  close()
+
+A) Wie: Diszipliniertes Programmieren
+
+B) RAII - Idiom
+
+
+https://github.com/pelocpp/cpp_design_patterns/blob/master/Patterns/RAII_Idiom/Resources/Readme.md
+
+Idee:
+
+Dieselbe Idee wie Smart Pointer:  Wir stecken die Resource in ein Hüllenobjekt / Wrapper
+
+Konstruktor:  open(), attach(), connect()
+
+
+Destruktor ===> close(), detach(), disconnect(), ..
+
+
+=================================================================
+
+
+
+

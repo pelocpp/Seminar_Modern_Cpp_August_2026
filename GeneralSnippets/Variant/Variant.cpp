@@ -2,6 +2,11 @@
 // Variant.cpp // std::variant
 // =====================================================================================
 
+module;
+
+#include <variant>
+#include <print>
+
 module modern_cpp:variant;
 
 namespace VariantDemo {

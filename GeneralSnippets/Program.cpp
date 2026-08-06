@@ -29,7 +29,7 @@ int main()
     try
     {
         //main_accumulate();
-        main_algorithms();
+       // main_algorithms();
         //main_allocator();
         //main_any();
         //main_argument_dependent_name_lookup();
@@ -45,7 +45,7 @@ int main()
         //main_concepts_requires_classes();
         //main_concepts_requires_functions();
         //main_const_variants();
-        //main_constexpr();
+        main_constexpr();
         //main_constexpr_crc();
         //main_constructor_invocations();
         //main_copy_move_elision();
@@ -56,7 +56,7 @@ int main()
         //main_erase_remove_idiom();
         //main_expression_templates();
         //main_exception_safety();
-        //main_expected();
+     //   main_expected();
         //main_explicit_keyword();
         //main_folding();
         //main_functional_programming();
@@ -64,7 +64,7 @@ int main()
         //main_functional_programming_alternate();
         //main_generate();
       //  main_generic_functions();
-        //main_initializer_list();
+       // main_initializer_list();
         //main_input_output_streams();  
         //main_invoke();
        // main_lambdas();
@@ -77,11 +77,11 @@ int main()
         //main_modularized_standard_library(); 
         //main_modules();
      //   main_move_semantics();
-        //main_optional();
+       // main_optional();
         //main_perfect_forwarding();
         //main_placement_new();
         //main_println();
-        //main_raii();
+       // main_raii();
         //main_raii_02();
         //main_random();
       // main_range_based_for_loop();

@@ -64,7 +64,7 @@ namespace OptionalExamples {
         contact.setPhone("123456789");
 
         if (contact.getPhone()) {
-            std::println("Number: {}", *contact.getPhone());
+            std::println("Number: {}", contact.getPhone().value());
         }
         else {
             std::println("No Number found!");
@@ -198,12 +198,17 @@ namespace OptionalExamples {
 
     static void test_02_optional_monadic()
     {
-        auto user{ std::make_optional<User>("Hans", "Mueller", 30) };
+        //auto user{ std::make_optional<User>("Hans", "Mueller", 30) };
         // or
-        // auto user{ std::make_optional<User>("Sepp", "", 30) };
+        //auto user{ std::make_optional<User>("Sepp", "", 30) };
 
-        auto result = user.and_then([](const auto& user) {
-            return hasValidName(user);
+        std::optional<User> user{ std::nullopt };
+
+       // auto dummy{ std::nullopt };
+
+        auto result = user.and_then( [] (const auto& user)  -> std::optional<std::string> {
+
+            return hasValidName(user);  // std::optional<std::string>
             }
         );
 

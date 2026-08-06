@@ -34,7 +34,8 @@ namespace InitializerList {
     static void test_01() {
 
         // testing functions expecting lists in function call
-        int sum = adder({ 1, 2, 3, 4, 5 });
+        int sum = adder ( { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 } );
+
         std::println("{}", sum);
 
         print({ 1, 2, 3, 4, 5 });
@@ -66,10 +67,11 @@ namespace InitializerList {
     };
 
     // container-like classes
-    class Polygon {
+    class Polygon
+    {
     public:
-        Polygon(std::initializer_list<Point> points)
-            : m_points{ points }
+        Polygon(std::initializer_list<Point> points)   // Stack
+            : m_points{ points }        // Vom Stack auf den Heap
         {}
 
     private:
@@ -83,6 +85,10 @@ namespace InitializerList {
             {                      // braces for std::initializer_list<Point> object
                 { 45.0, 45.0 },    // c'tor Point - using brace initialization syntax
                 { 60.0, 60.0 },    // c'tor Point - using brace initialization syntax
+                { 120.0, 120.0 },
+                { 120.0, 120.0 },
+                { 120.0, 120.0 },
+                { 120.0, 120.0 },
                 { 120.0, 120.0 },
                 { 180.0, 180.0 }
             }
